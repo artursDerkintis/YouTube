@@ -1,0 +1,79 @@
+PODS:
+  - Alamofire (3.1.4)
+  - AsyncDisplayKit (1.9.4):
+    - AsyncDisplayKit/ASDealloc2MainObject (= 1.9.4)
+  - AsyncDisplayKit/ASDealloc2MainObject (1.9.4)
+  - Google/Core (1.3.2):
+    - GoogleInterchangeUtilities (~> 1.0)
+    - GoogleNetworkingUtilities (~> 1.0)
+    - GoogleSymbolUtilities (~> 1.0)
+    - GoogleUtilities (~> 1.1)
+  - Google/SignIn (1.3.2):
+    - Google/Core
+    - GoogleSignIn (~> 2.0)
+  - GoogleAppUtilities (1.0.0):
+    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleAuthUtilities (1.0.1):
+    - GoogleNetworkingUtilities (~> 1.0)
+    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleInterchangeUtilities (1.1.0):
+    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleNetworkingUtilities (1.0.0):
+    - GoogleSymbolUtilities (~> 1.0)
+  - GoogleSignIn (2.4.0):
+    - GoogleAppUtilities (~> 1.0)
+    - GoogleAuthUtilities (~> 1.0)
+    - GoogleNetworkingUtilities (~> 1.0)
+    - GoogleUtilities (~> 1.0)
+  - GoogleSymbolUtilities (1.0.3)
+  - GoogleUtilities (1.1.0):
+    - GoogleSymbolUtilities (~> 1.0.0)
+  - NVActivityIndicatorView (2.3)
+  - OAuthSwift (0.5.0)
+  - PBJHexagon (0.1.1)
+  - SnapKit (0.15.0)
+  - SwiftyJSON (2.3.2)
+  - SwiftyUserDefaults (2.0.0)
+  - XCDYouTubeKit (2.4.3)
+
+DEPENDENCIES:
+  - Alamofire (~> 3.0)
+  - AsyncDisplayKit
+  - Google/SignIn
+  - NVActivityIndicatorView
+  - OAuthSwift (~> 0.5.0)
+  - PBJHexagon
+  - SnapKit (~> 0.15.0)
+  - SwiftyJSON (from `https://github.com/SwiftyJSON/SwiftyJSON.git`)
+  - SwiftyUserDefaults
+  - XCDYouTubeKit (~> 2.4.3)
+
+EXTERNAL SOURCES:
+  SwiftyJSON:
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+CHECKOUT OPTIONS:
+  SwiftyJSON:
+    :commit: 5f59648a6e9356b26c5cb698ab924fa7d750b6c9
+    :git: https://github.com/SwiftyJSON/SwiftyJSON.git
+
+SPEC CHECKSUMS:
+  Alamofire: fbc829692f351fa1d8a31dd75fd7f7f56fea31fb
+  AsyncDisplayKit: 0932ff6f78364130a195039ab9a1c2ff63adc665
+  Google: 97618e118111b998cce1d8dd1bd98b82301d72db
+  GoogleAppUtilities: c01c6a5671e9da8b9d690fdaec5959d6c2aac699
+  GoogleAuthUtilities: 049ffd3a297cdffd271451b82fd4e75304f15ef3
+  GoogleInterchangeUtilities: d7f7174176fbcf9710f696f1acebad4dbd98ac03
+  GoogleNetworkingUtilities: 292992ab31b7b4ba32809a0e8b40e324cdfb2c0c
+  GoogleSignIn: 79929b51e6299c69f1197bbd9c7a1367d523ecd8
+  GoogleSymbolUtilities: 82ad9f93d3615244b3f4ce440f5ab2515e8b4f56
+  GoogleUtilities: 8ed9134debe11719097881711464752900668f10
+  NVActivityIndicatorView: c7ef25ef527ab5e51b00322cb1ddd58681bcf2a3
+  OAuthSwift: f2e0de083739da5697be095c9af2671242a4ed8b
+  PBJHexagon: 689c33964ff02f71f90d86fb181cbfdabce7886a
+  SnapKit: 4962eed2ee18e48cbd2b2292fffc57efe7235f87
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  SwiftyUserDefaults: 1266e9734c68bcfbac8294ee84173dc8ba6db312
+  XCDYouTubeKit: a4a1a60faa7bc97744a1184501e82ef10ca15897
+
+COCOAPODS: 0.39.0

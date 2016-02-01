@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="10118.6" systemVersion="15B42" minimumToolsVersion="Xcode 7.0">
+    <entity name="Favorites" representedClassName=".Favorites" syncable="YES">
+        <attribute name="arrangeIndex" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="channelID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="channelTitle" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="duration" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="publishedAt" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="viewCount" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Favorites" positionX="-63" positionY="-18" width="128" height="180"/>
+    </elements>
+</model>
