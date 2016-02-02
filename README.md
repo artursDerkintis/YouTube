@@ -11,6 +11,14 @@ It looks like this.
 ![alt tag](https://github.com/artursDerkintis/YouTube/blob/master/screenshoots/shoot2.jpg)
 ![alt tag](https://github.com/artursDerkintis/YouTube/blob/master/screenshoots/shoot3.jpg)
 
+#TODO
+Its not even close to ready.
+It has no unit tests yet, because for now the app's structure is in my head.
+Still to implement:
+*like/dislike
+*subscribe to channel
+*playlists
+*comments section and description
 
 
 #License
