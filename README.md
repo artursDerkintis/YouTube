@@ -13,12 +13,14 @@ It looks like this.
 
 #TODO
 Its not even close to ready.
+
 It has no unit tests yet, because for now the app's structure is in my head.
+
 Still to implement:
-*like/dislike
-*subscribe to channel
-*playlists
-*comments section and description
+      *like/dislike
+      *subscribe to channel
+      *playlists
+      *comments section and description
 
 
 #License
