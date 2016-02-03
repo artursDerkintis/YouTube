@@ -93,7 +93,7 @@ class SearchResultsProvider: NSObject {
         }
     }
     
-    func getSuggestions(string : String, completion : (strings : [String]) -> Void){
+    func getSearchSuggestions(string : String, completion : (strings : [String]) -> Void){
         let url = "https://suggestqueries.google.com/complete/search?client=youtube&ds=yt&client=firefox&q=\(string)"
         let setCH = NSCharacterSet.URLQueryAllowedCharacterSet()
         Alamofire.request(.GET, url.stringByAddingPercentEncodingWithAllowedCharacters(setCH)!).validate().responseJSON { response in

@@ -81,7 +81,7 @@ class BrowseTopView: UIView {
         
         
         backButton.snp_makeConstraints { (make) -> Void in
-            make.width.equalTo(38)
+            make.width.equalTo(37)
         }
         
         v.snp_makeConstraints { (make) -> Void in

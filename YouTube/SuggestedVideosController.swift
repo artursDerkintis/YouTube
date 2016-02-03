@@ -8,7 +8,7 @@
 
 import UIKit
 
-class SuggestedVideosController: UIViewController, UICollectionViewDataSource {
+class SuggestedVideosController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     var videos : [Video]?{
         didSet{
@@ -34,6 +34,7 @@ class SuggestedVideosController: UIViewController, UICollectionViewDataSource {
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         view.addSubview(collectionView)
         collectionView.dataSource = self
+        collectionView.delegate = self
         collectionView.registerClass(SmallVideoCell.self, forCellWithReuseIdentifier: "Video")
         collectionView.backgroundColor = UIColor.clearColor()
         collectionView.showsHorizontalScrollIndicator = false

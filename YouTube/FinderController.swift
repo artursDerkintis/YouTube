@@ -27,6 +27,8 @@ class FinderController: UIViewController {
         favViewC.view.snp_makeConstraints { (make) -> Void in
             make.top.right.left.bottom.equalTo(0)
         }
+        favViewC.view.alpha = 0.0
+        
         searchViewC = SearchViewController()
         self.view.addSubview(searchViewC.view)
         
@@ -76,7 +78,6 @@ class FinderController: UIViewController {
 
     func switchTabs(sender : UIButton){
         showHide(sender.tag)
-        
     }
     
     func showHide(tag : Int){
@@ -87,7 +88,7 @@ class FinderController: UIViewController {
             self.favViewC.view.alpha = tag == 0 ? 0.0 : 1.0
             }) { (fin) -> Void in
                 self.searchButton.selected = tag == 0 ? true : false
-                self.favButton.selected = tag == 0 ? false : false
+                self.favButton.selected = tag == 0 ? false : true
                 self.favViewC.view.hidden = tag == 0
                 self.searchViewC.view.hidden = tag != 0
         }

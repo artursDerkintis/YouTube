@@ -32,12 +32,10 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
     var currentSearch = ""
     var pageToken : String?
     
-    var loadmoreButton : UIButton!
-    
     var suggestionTable : SuggestionsTableViewController!
     
     var activityInd: NVActivityIndicatorView!
-    
+    var buttomLoader : NVActivityIndicatorView!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -57,7 +55,15 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
             make.top.equalTo(0)
             make.right.left.bottom.equalTo(0)
         }
-        
+        buttomLoader = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), type: NVActivityIndicatorType.BallScaleRippleMultiple, color: .whiteColor(), size: CGSize(width: 20, height: 20))
+        view.addSubview(buttomLoader)
+        buttomLoader.hidesWhenStopped = true
+        buttomLoader.startAnimation()
+        buttomLoader.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(self.view.snp_centerX)
+            make.bottom.equalTo(30)
+            make.height.equalTo(64)
+        }
         searchField = UITextField(frame: .zero)
         view.addSubview(searchField)
         searchField.snp_makeConstraints { (make) -> Void in
@@ -83,18 +89,6 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         searchField.addTarget(self, action: "textDidChange:", forControlEvents: .EditingChanged)
         searchField.addTarget(self, action: "textDidEnd", forControlEvents: .EditingDidEnd)
         
-        loadmoreButton = UIButton(type: .Custom)
-        view.addSubview(loadmoreButton)
-        loadmoreButton.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(0)
-            make.left.right.equalTo(0)
-            make.height.equalTo(50)
-        }
-        loadmoreButton.transform = CGAffineTransformMakeTranslation(0, 64)
-        loadmoreButton.setTitle("Load more", forState: .Normal)
-        loadmoreButton.setTitleColor(.blackColor(), forState: .Normal)
-        loadmoreButton.addTarget(self, action: "loadMoreTapped:", forControlEvents: .TouchDown)
-        loadmoreButton.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
         
         suggestionTable = SuggestionsTableViewController()
         view.addSubview(suggestionTable.view)
@@ -115,12 +109,11 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         activityInd.hidesWhenStopped = true
         
     }
-    
-    func loadMoreTapped(sender : UIButton){
-        sender.setTitle("Loading...", forState: .Normal)
-        getSearchResults(currentSearch)
+    private var loadingmore : Bool = false{
+        didSet{
+            loadingmore ? buttomLoader.startAnimation() : buttomLoader.stopAnimation()
+        }
     }
-    
     private var loading : Bool = false{
         didSet{
             loading ? activityInd.startAnimation() : activityInd.stopAnimation()
@@ -152,15 +145,14 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
                             return false
                         }
                     })
-                    self.loadmoreButton.setTitle("Load more", forState: .Normal)
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
-                        self.loadmoreButton.transform = CGAffineTransformMakeTranslation(0, 64)
-                    })
+                   
+                
                 }
             }
             self.pageToken = nextPageToken
         }
     }
+    
     func textDidStart(textField : UITextField){
         showHideSuggs(false)
     }
@@ -288,9 +280,7 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height)) {
             //reach bottom
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                self.loadmoreButton.transform = CGAffineTransformIdentity
-            })
+            getSearchResults(currentSearch)
         }
         
         if (scrollView.contentOffset.y < 0){
@@ -299,9 +289,6 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         
         if (scrollView.contentOffset.y >= 0 && scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.frame.size.height)){
             //not top and not bottom
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                self.loadmoreButton.transform = CGAffineTransformMakeTranslation(0, 64)
-            })
         }
     }
     
@@ -310,10 +297,6 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
-        /*UIView.animateWithDuration(0.3, delay: 0.0, options: [UIViewAnimationOptions.Autoreverse, UIViewAnimationOptions.CurveEaseInOut], animations: { () -> Void in
-        collectionView.cellForItemAtIndexPath(indexPath)?.transform = CGAffineTransformMakeScale(0.95, 0.95)
-        }, completion: nil)*/
         
         if let _ = collectionView.cellForItemAtIndexPath(indexPath) as? VideoCell{
             NSNotificationCenter.defaultCenter().postNotificationName(videoNotification, object: self.items![indexPath.row].video!)

@@ -45,6 +45,7 @@
 		B85F7A651C415F2B00345109 /* SuggestedVideosController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F7A641C415F2B00345109 /* SuggestedVideosController.swift */; };
 		B85F7A671C415F5300345109 /* SuggestedVideosProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F7A661C415F5300345109 /* SuggestedVideosProvider.swift */; };
 		B85F7A691C417FAA00345109 /* BottomProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F7A681C417FAA00345109 /* BottomProgress.swift */; };
+		B86980671C611AC900DE2EFC /* YouTubeQueries.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86980661C611AC900DE2EFC /* YouTubeQueries.swift */; };
 		B8722B251C35CFB900E5BBE4 /* ParallaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8722B241C35CFB900E5BBE4 /* ParallaxView.swift */; };
 		B87570341C355A0B00256D82 /* ChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87570331C355A0B00256D82 /* ChannelCell.swift */; };
 		B87570361C355A1F00256D82 /* VideoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87570351C355A1F00256D82 /* VideoCell.swift */; };
@@ -127,6 +128,7 @@
 		B85F7A641C415F2B00345109 /* SuggestedVideosController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestedVideosController.swift; sourceTree = "<group>"; };
 		B85F7A661C415F5300345109 /* SuggestedVideosProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestedVideosProvider.swift; sourceTree = "<group>"; };
 		B85F7A681C417FAA00345109 /* BottomProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomProgress.swift; sourceTree = "<group>"; };
+		B86980661C611AC900DE2EFC /* YouTubeQueries.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubeQueries.swift; sourceTree = "<group>"; };
 		B8722B241C35CFB900E5BBE4 /* ParallaxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallaxView.swift; sourceTree = "<group>"; };
 		B87570331C355A0B00256D82 /* ChannelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelCell.swift; sourceTree = "<group>"; };
 		B87570351C355A1F00256D82 /* VideoCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoCell.swift; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 			isa = PBXGroup;
 			children = (
 				B875704F1C3573D200256D82 /* YouTubeTests.swift */,
+				B86980661C611AC900DE2EFC /* YouTubeQueries.swift */,
 				B87570511C3573D200256D82 /* Info.plist */,
 			);
 			path = YouTubeTests;
@@ -414,7 +417,6 @@
 					};
 					B875704C1C3573D100256D82 = {
 						CreatedOnToolsVersion = 7.2;
-						TestTargetID = B81AF43D1C32BD98001C6932;
 					};
 				};
 			};
@@ -562,6 +564,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B86980671C611AC900DE2EFC /* YouTubeQueries.swift in Sources */,
 				B87570501C3573D200256D82 /* YouTubeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -720,25 +723,23 @@
 		};
 		B87570551C3573D200256D82 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5CE731503E0FE00A50B60484 /* Pods.debug.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = YouTubeTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.artursderkintis.YouTubeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YouTube.app/YouTube";
 			};
 			name = Debug;
 		};
 		B87570561C3573D200256D82 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 7BD62B7E0B28A66408CE2118 /* Pods.release.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				INFOPLIST_FILE = YouTubeTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.artursderkintis.YouTubeTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/YouTube.app/YouTube";
 			};
 			name = Release;
 		};

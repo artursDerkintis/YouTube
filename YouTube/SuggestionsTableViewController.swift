@@ -33,7 +33,7 @@ class SuggestionsTableViewController: UITableViewController {
         tableView.backgroundColor = .clearColor()
     }
     func getSearchResults(string : String){
-        searchProvider.getSuggestions(string) { (strings) -> Void in
+        searchProvider.getSearchSuggestions(string) { (strings) -> Void in
             self.strings = strings
         }
     }

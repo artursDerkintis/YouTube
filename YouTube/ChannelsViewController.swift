@@ -30,11 +30,10 @@ class ChannelsViewController: UINavigationController {
                 lasty.collectionView.transform = CGAffineTransformMakeScale(0.7, 0.7)
             })
         }
-        delay(0.3) { () -> () in
-            self.channelViewControllers.append(channelVC)
-            channelVC.pageToken = nil
-            channelVC.loadVideosForChannel(channel.channelDetails!.id!)
-        }
+        self.channelViewControllers.append(channelVC)
+        channelVC.pageToken = nil
+        channelVC.loadVideosForChannel(channel.channelDetails!.id!)
+        
         
     }
     
