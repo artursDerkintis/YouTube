@@ -20,11 +20,4 @@ class YouTubeTests: XCTestCase {
         super.tearDown()
     }
     
-    func testSearchQuery(){
-        let expectation = self.expectationWithDescription("Wait")
-        let provider = SearchResultsProvider()
-        provider.getSuggestions("Swift")
-        self.waitForExpectationsWithTimeout(1000, handler: nil)
-        
     }
-}
