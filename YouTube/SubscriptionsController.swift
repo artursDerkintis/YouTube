@@ -17,7 +17,6 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
         didSet{
             dispatch_async(dispatch_get_main_queue()) { () -> Void in
                 self.collectionView.reloadData()
-                
             }
         }
     }
@@ -30,6 +29,7 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
     var smallCollectionViewLayout = UICollectionViewFlowLayout()
     var activityInd: NVActivityIndicatorView!
     let subs = SubscriptionsProvider()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         bigCollectionViewLayout.itemSize = CGSize(width: 100, height: 100)
@@ -57,7 +57,11 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
         }
         activityInd.hidesWhenStopped = true
         loading = true
+        NSNotificationCenter.defaultCenter().addObserverForName(subUpdate, object: nil, queue: nil) { (not) -> Void in
+            self.getChannelsInitially()
+        }
     }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         UIView.animateWithDuration(0.3) { () -> Void in
@@ -110,8 +114,10 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let sub = subscriptions?[indexPath.row]{
-            browserDelegate?.loadSubscription(sub)
-            collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+            browserDelegate?.loadSubscription(sub.channelId!)
+            delay(0.3, closure: { () -> () in
+                collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
+            })
         }
     }
     

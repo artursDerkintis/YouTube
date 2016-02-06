@@ -7,29 +7,62 @@
 //
 
 import UIKit
-import OAuthSwift
 
-
-
-let clientId    = "1013698024374-dpak3l4sg2s4qpr4v4u4o7unnekftb1l.apps.googleusercontent.com"
-let clientSecrect = "HXR4U5IFXbEMAE5UAqFKa6uq"
-let callback    = "http://localhost:8080/youtubestarfly"
-let response    = "code"
-let scope       = "https://www.googleapis.com/auth/youtube"
-let url         = "https://accounts.google.com/o/oauth2/auth"
-
-class YouTubeClient: NSObject {
+class YouTubeClient: NSObject, GIDSignInDelegate, GIDSignInUIDelegate  {
     static let sharedInstance = YouTubeClient()
     private override init() {}
     
-    func loginWithCompletion(completion : (user : User) -> Void){
-        let oauth = OAuth2Swift(consumerKey: clientId, consumerSecret:  clientSecrect, authorizeUrl: url, responseType: response)
-        oauth.authorizeWithCallbackURL(NSURL(string: callback)!, scope: scope, state:  "name=value", success: { (credential, response, parameters) -> Void in
-            print(credential.oauth_token)
-            print(response)
-            }) { (error) -> Void in
-                print(error.localizedDescription)
+    func login(){
+        UserHandler.sharedInstance.expired { (expired) -> Void in
+            if expired{
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    //Have expired - request new one
+                    GIDSignIn.sharedInstance().delegate = self
+                    GIDSignIn.sharedInstance().uiDelegate = self
+                    GIDSignIn.sharedInstance().scopes = ["https://www.googleapis.com/auth/youtubepartner",
+                        "https://www.googleapis.com/auth/youtube", "https://www.googleapis.com/auth/youtube.force-ssl"]
+                    GIDSignIn.sharedInstance().signIn()
+                }
+            }else{
+                //Havent expired
+                
+                dispatch_async(dispatch_get_main_queue()) { () -> Void in
+                    UserHandler.sharedInstance.loaded = true
+                }
+            }
+        }
+    }
+    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
+        if (error == nil) {
+            // Perform any operations on signed in user here.
+            let userId = user.userID                  // For client-side use only!
+            let token = user.authentication.accessToken // Safe to send to the server
+            let name = user.profile.name
+            let email = user.profile.email
+            let imageURL = user.profile.imageURLWithDimension(100).absoluteString
+            UserHandler.sharedInstance.user = User(email: email, name: name, token: token, imageURL: imageURL)
+            
+            // ...
+        } else {
+            print("\(error.localizedDescription)")
         }
         
     }
+    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
+    }
+    
+    // Present a view that prompts the user to sign in with Google
+    func signIn(signIn: GIDSignIn!, presentViewController viewController: UIViewController!) {
+        UIApplication.sharedApplication().delegate?.window??.rootViewController?.presentViewController(viewController, animated: true, completion: nil)
+    }
+    
+    // Dismiss the "Sign in with Google" view
+    func signIn(signIn: GIDSignIn!, dismissViewController viewController: UIViewController!) {
+        UIApplication.sharedApplication().delegate?.window??.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!) {
+        
+    }
+
 }

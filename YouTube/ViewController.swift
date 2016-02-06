@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 
-let videoNotification = "videoNotify"
+
 
 class ViewController: UIViewController {
     var videoController : VideoViewController!

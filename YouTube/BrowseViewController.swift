@@ -9,7 +9,7 @@
 import UIKit
 
 protocol BrowserDelegate{
-    func loadSubscription(sub: Subscription)
+    func loadSubscription(channelId : String)
     func setOwnInfo()
 }
 
@@ -55,6 +55,15 @@ class BrowseViewController: UIViewController, BrowserDelegate {
         long.minimumPressDuration = 1.0
         navigationView.backButton.addGestureRecognizer(long)
         // Do any additional setup after loading the view.
+        
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "openChannelByNotif:", name: channelNotification, object: nil)
+    }
+    
+    func openChannelByNotif(not : NSNotification){
+        if let id = (not.object as? Channel)?.channelDetails?.id{
+            self.loadSubscription(id)
+        }
     }
     
     func goHome(){
@@ -100,18 +109,20 @@ class BrowseViewController: UIViewController, BrowserDelegate {
     func setOwnInfo(){
         navigationView.setDetails(currentUser.name!, thumbnail: currentUser.imageURL!, description: "", subscribed: Subscribed.Unknown)
         navigationView.backButton.hidden = true
+        
     }
     func setChannelInfo(){
         if let cdet = currentChannel.channelDetails, subscribed = currentChannel.subscribed {
             self.navigationView.setDetails(cdet.title!, thumbnail: cdet.thumbnail!, description: "\(cdet.shortSubscriberCount) subscribers", subscribed: subscribed ? Subscribed.Subscribed : Subscribed.NotSubscribed)
             self.navigationView.backButton.hidden = false
+            self.navigationView.currentChannelId = cdet.id
         }
     }
-    func loadSubscription(sub: Subscription){
+    func loadSubscription(channelId : String){
         let channel = Channel()
-        channel.getChannelDetails(sub.channelId!) { (channelDetails) -> Void in
+        channel.getChannelDetails(channelId) { (channelDetails) -> Void in
             channel.channelDetails = channelDetails
-            haveISubscribedToChannel(sub.channelId!, token: currentUser.token!, completion: { (fin) -> Void in
+            haveISubscribedToChannel(channelId, token: currentUser.token!, completion: { (fin) -> Void in
                 channel.subscribed = fin
                 self.currentChannel = channel
                 self.forwardSteps.append(self.currentChannel)

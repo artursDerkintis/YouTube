@@ -8,7 +8,7 @@
 
 import XCTest
 @testable import YouTube
-class YouTubeQueries: XCTestCase {
+class YouTubeQueriesTests: XCTestCase {
     
     override func setUp() {
         super.setUp()

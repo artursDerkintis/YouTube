@@ -17,7 +17,6 @@ class UserHandler: NSObject {
     
     override private init(){}
     static let sharedInstance = UserHandler()
-    
     var user : User? {
         get{
             if let archived = Defaults.objectForKey(currentUserKey) as? NSData{
@@ -49,7 +48,21 @@ class UserHandler: NSObject {
                 NSURLSession.sharedSession().dataTaskWithURL(url) { (data, res, error) -> Void in
                     if let data = data{
                         let json = JSON(data: data)
-                        json["error"].string == "invalid_token" ? completion(true) : completion(false)
+                        if json["error"].string == "invalid_token" {
+                            
+                            //Expired
+                            completion(true)
+                        }else{
+                            
+                            //Hasn't expired
+                            completion(false)
+                            
+                            //Set up timer for fetching new access token when old one expires
+                            if let expiresIn = json["expires_in"].string{
+                                NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(expiresIn)!, target: self, selector: "updateToken", userInfo: nil, repeats: false)
+                            }
+                            
+                        }
                         print(json)
                         return
                     }
@@ -59,6 +72,9 @@ class UserHandler: NSObject {
         }else{
             completion(true)
         }
+    }
+    func updateToken(){
+        YouTubeClient.sharedInstance.login()
     }
 }
 

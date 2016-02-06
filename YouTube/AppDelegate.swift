@@ -12,7 +12,7 @@ import OAuthSwift
 @UIApplicationMain
 
 
-class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, GIDSignInUIDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     let dateFormater = NSDateFormatter()
@@ -27,28 +27,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, GIDSig
         }
         catch {
             print("Audio session setCategory failed")
-        }
-        UserHandler.sharedInstance.expired { (expired) -> Void in
-            if expired{
-                dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    var configureError: NSError?
-                    GGLContext.sharedInstance().configureWithError(&configureError)
-                    assert(configureError == nil, "Error configuring Google services: \(configureError)")
-                    
-                    GIDSignIn.sharedInstance().delegate = self
-                    GIDSignIn.sharedInstance().uiDelegate = self
-                    GIDSignIn.sharedInstance().scopes = ["https://www.googleapis.com/auth/youtube"]
-                    GIDSignIn.sharedInstance().signIn()
-                }
-            }else{
-                //Havent expired
-                
-                dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    UserHandler.sharedInstance.loaded = true
-                }
-            }
-        }
         
+        }
+        var configureError: NSError?
+        GGLContext.sharedInstance().configureWithError(&configureError)
+        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+
+        
+        YouTubeClient.sharedInstance.login()
         
         return true
     }
@@ -92,37 +78,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, GIDSignInDelegate, GIDSig
     
     
     
-    func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
-        if (error == nil) {
-            // Perform any operations on signed in user here.
-            let userId = user.userID                  // For client-side use only!
-            let token = user.authentication.accessToken // Safe to send to the server
-            let name = user.profile.name
-            let email = user.profile.email
-            let imageURL = user.profile.imageURLWithDimension(100).absoluteString
-            UserHandler.sharedInstance.user = User(email: email, name: name, token: token, imageURL: imageURL)
-            
-            // ...
-        } else {
-            print("\(error.localizedDescription)")
-        }
-        
     }
-    func signInWillDispatch(signIn: GIDSignIn!, error: NSError!) {
-    }
-    
-    // Present a view that prompts the user to sign in with Google
-    func signIn(signIn: GIDSignIn!, presentViewController viewController: UIViewController!) {
-        self.window?.rootViewController?.presentViewController(viewController, animated: true, completion: nil)
-    }
-    
-    // Dismiss the "Sign in with Google" view
-    func signIn(signIn: GIDSignIn!, dismissViewController viewController: UIViewController!) {
-        self.window?.rootViewController?.dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func signIn(signIn: GIDSignIn!, didDisconnectWithUser user: GIDGoogleUser!, withError error: NSError!) {
-        
-    }
-}
 

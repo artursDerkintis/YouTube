@@ -20,6 +20,8 @@ class VideoCell: UICollectionViewCell {
     var topBanner : UIView!
     var created = false
     
+    var channelTitleDelgate : ChannelTitleDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         // Initialization code
@@ -60,6 +62,9 @@ class VideoCell: UICollectionViewCell {
             make.height.equalTo(20)
         }
         
+        let tap = UITapGestureRecognizer(target: self, action: "tappedOnChannelTitle")
+        topBanner.addGestureRecognizer(tap)
+        
         channelTitleLabel = UILabel(frame: .zero)
         channelTitleLabel.tag = hidableViewTag
         imageContainer.addSubview(channelTitleLabel)
@@ -93,6 +98,11 @@ class VideoCell: UICollectionViewCell {
         }
         design()
     }
+    
+    func tappedOnChannelTitle(){
+        channelTitleDelgate?.openChannelForCell(self)
+    }
+    
     override func prepareForReuse() {
         super.prepareForReuse()
         durationLabel.text = ""
@@ -102,6 +112,7 @@ class VideoCell: UICollectionViewCell {
     }
     
     func design(){
+        
         imageContainer.backgroundColor = UIColor.whiteColor()
         imageContainer.layer.cornerRadius = 3
         imageContainer.layer.shadowOffset = CGSize(width: 1, height: 2)
@@ -135,9 +146,10 @@ class VideoCell: UICollectionViewCell {
         videoTitleLabel.textAlignment = .Center
         videoTitleLabel.font = UIFont.systemFontOfSize(13, weight: UIFontWeightRegular)
         
-        
-    
     }
+    
+  
+    
     func setDurationLabelSize(){
         let contentSize = (durationLabel.text! as NSString).sizeWithAttributes([NSFontAttributeName: durationLabel.font])
         durationLabel.frame.size = CGSize(width: contentSize.width, height: 20)

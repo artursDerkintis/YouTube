@@ -33,8 +33,8 @@ class ChannelsViewController: UINavigationController {
         self.channelViewControllers.append(channelVC)
         channelVC.pageToken = nil
         channelVC.loadVideosForChannel(channel.channelDetails!.id!)
-        
-        
+        channelVC.loading = true
+        channelVC.collectionView.scrollsToTop = true
     }
     
     func removeCurrentChannelController(){
@@ -61,15 +61,5 @@ class ChannelsViewController: UINavigationController {
         // Dispose of any resources that can be recreated.
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

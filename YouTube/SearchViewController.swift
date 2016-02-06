@@ -9,7 +9,15 @@
 import UIKit
 import NVActivityIndicatorView
 
-class SearchViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, SuggestionDelegate {
+let videoNotification = "videoNotify"
+let subUpdate = "subsUpdate"
+let channelNotification = "channelNotify"
+
+protocol ChannelTitleDelegate{
+    func openChannelForCell(cell : VideoCell)
+}
+
+class SearchViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UIScrollViewDelegate, SuggestionDelegate, ChannelTitleDelegate {
     var collectionView : UICollectionView!
     
     var provider = SearchResultsProvider()
@@ -36,6 +44,7 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     var activityInd: NVActivityIndicatorView!
     var buttomLoader : NVActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -58,12 +67,12 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         buttomLoader = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), type: NVActivityIndicatorType.BallScaleRippleMultiple, color: .whiteColor(), size: CGSize(width: 20, height: 20))
         view.addSubview(buttomLoader)
         buttomLoader.hidesWhenStopped = true
-        buttomLoader.startAnimation()
         buttomLoader.snp_makeConstraints { (make) -> Void in
             make.centerX.equalTo(self.view.snp_centerX)
-            make.bottom.equalTo(30)
+            make.bottom.equalTo(10)
             make.height.equalTo(64)
         }
+        
         searchField = UITextField(frame: .zero)
         view.addSubview(searchField)
         searchField.snp_makeConstraints { (make) -> Void in
@@ -128,6 +137,8 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         provider.getSearchResults(string, pageToken: pageToken) { (nextPageToken, items) -> Void in
             
             self.loading = false
+            self.loadingmore = false
+            
             if self.pageToken == nil{
                 self.items = items.filter({ (item) -> Bool in
                     if item.type != .None{
@@ -243,6 +254,7 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
                 if let views = item.video?.videoDetails?.shortViewCount{
                     videoCell.viewsCountLabel.text = views
                 }
+                videoCell.channelTitleDelgate = self
                 return videoCell
                 
             case .Channel:
@@ -281,6 +293,7 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height)) {
             //reach bottom
             getSearchResults(currentSearch)
+            loadingmore = true
         }
         
         if (scrollView.contentOffset.y < 0){
@@ -298,11 +311,24 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         
-        if let _ = collectionView.cellForItemAtIndexPath(indexPath) as? VideoCell{
-            NSNotificationCenter.defaultCenter().postNotificationName(videoNotification, object: self.items![indexPath.row].video!)
+        if let item = self.items?[indexPath.row] where item.type == .Video{
+            NSNotificationCenter.defaultCenter().postNotificationName(videoNotification, object: item.video!)
+        }else if let item = self.items?[indexPath.row] where item.type == .Channel{
+            NSNotificationCenter.defaultCenter().postNotificationName(channelNotification, object: item.channel!)
         }
     }
     
+    func openChannelForCell(cell: VideoCell) {
+        if let row = self.collectionView.indexPathForCell(cell)?.row{
+            if let item = self.items?[row]{
+                let mockupChannel = Channel()
+                let mockupChannelDetails = ChannelDetails()
+                mockupChannelDetails.id = item.video?.videoDetails?.channelId
+                mockupChannel.channelDetails = mockupChannelDetails
+                NSNotificationCenter.defaultCenter().postNotificationName(channelNotification, object: mockupChannel)
+            }
+        }
+    }
     
     /*
     // MARK: - Navigation

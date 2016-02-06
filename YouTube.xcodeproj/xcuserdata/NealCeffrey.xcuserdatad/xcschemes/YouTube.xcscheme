@@ -39,6 +39,16 @@
                ReferencedContainer = "container:YouTube.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B81D26641C627249008883D1"
+               BuildableName = "YouTubeUITests.xctest"
+               BlueprintName = "YouTubeUITests"
+               ReferencedContainer = "container:YouTube.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

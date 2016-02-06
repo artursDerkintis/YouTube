@@ -30,7 +30,8 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
     private let provider = ChannelProvider()
     
     private var activityInd: NVActivityIndicatorView!
-    private var loadmoreButton : UIButton!
+    private var buttomLoader : NVActivityIndicatorView!
+
     private var currentChannelId : String?
     
     override func viewDidLoad() {
@@ -58,26 +59,29 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
             make.centerY.equalTo(self.view.snp_centerY)
         }
         activityInd.hidesWhenStopped = true
-        
-        loadmoreButton = UIButton(type: .Custom)
-        view.addSubview(loadmoreButton)
-        loadmoreButton.snp_makeConstraints { (make) -> Void in
-            make.bottom.equalTo(0)
-            make.left.right.equalTo(0)
-            make.height.equalTo(50)
+        buttomLoader = NVActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 0, height: 0), type: NVActivityIndicatorType.BallScaleRippleMultiple, color: .whiteColor(), size: CGSize(width: 20, height: 20))
+        view.addSubview(buttomLoader)
+        buttomLoader.hidesWhenStopped = true
+        buttomLoader.snp_makeConstraints { (make) -> Void in
+            make.centerX.equalTo(self.view.snp_centerX)
+            make.bottom.equalTo(10)
+            make.height.equalTo(64)
         }
-        loadmoreButton.transform = CGAffineTransformMakeTranslation(0, 64)
-        loadmoreButton.setTitle("Load more", forState: .Normal)
-        loadmoreButton.setTitleColor(.blackColor(), forState: .Normal)
-        loadmoreButton.addTarget(self, action: "loadMoreTapped:", forControlEvents: .TouchDown)
-        loadmoreButton.titleLabel?.font = UIFont.systemFontOfSize(14, weight: UIFontWeightMedium)
+
+      
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     }
     
-    private var loading : Bool = false{
+    private var loadingmore : Bool = false{
+        didSet{
+            loadingmore ? buttomLoader.startAnimation() : buttomLoader.stopAnimation()
+        }
+    }
+    
+    var loading : Bool = false{
         didSet{
             loading ? activityInd.startAnimation() : activityInd.stopAnimation()
             UIView.animateWithDuration(0.3) { () -> Void in
@@ -89,11 +93,10 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func loadVideosForChannel(id: String){
         self.currentChannelId = id
-        loading = true
-        self.collectionView.scrollsToTop = true
         let accesToken = currentUser.token
         provider.getVideosOfChannel(id, accessToken: accesToken, pageToken: pageToken) { (nextPageToken, items) -> Void in
             self.loading = false
+            self.loadingmore = false
             if self.pageToken == nil{
                 self.items = items.filter({ (item) -> Bool in
                     if item.type == .Video{
@@ -111,10 +114,7 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
                             return false
                         }
                     })
-                    self.loadmoreButton.setTitle("Load more", forState: .Normal)
-                    UIView.animateWithDuration(0.3, animations: { () -> Void in
-                        self.loadmoreButton.transform = CGAffineTransformMakeTranslation(0, 64)
-                    })
+                    
                 }
             }
             self.pageToken = nextPageToken
@@ -122,20 +122,15 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
         
     }
     
-    func loadMoreTapped(sender : UIButton){
-        sender.setTitle("Loading...", forState: .Normal)
-        loadVideosForChannel(self.currentChannelId ?? "")
-        loading = false
-    }
+    
     
    
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
         if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height)) {
             //reach bottom
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                self.loadmoreButton.transform = CGAffineTransformIdentity
-            })
+            loadingmore = true
+            loadVideosForChannel(self.currentChannelId ?? "")
         }
         
         if (scrollView.contentOffset.y < 0){
@@ -144,9 +139,7 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         if (scrollView.contentOffset.y >= 0 && scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.frame.size.height)){
             //not top and not bottom
-            UIView.animateWithDuration(0.3, animations: { () -> Void in
-                self.loadmoreButton.transform = CGAffineTransformMakeTranslation(0, 64)
-            })
+           
         }
     }
 

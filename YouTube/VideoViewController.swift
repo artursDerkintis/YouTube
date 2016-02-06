@@ -105,6 +105,7 @@ class VideoViewController: UIViewController, VideoDelegate {
         }
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "playVideo:", name: videoNotification, object: nil)
+        
     }
     func playVideo(notification : NSNotification) {
         if let video = notification.object as? Video{

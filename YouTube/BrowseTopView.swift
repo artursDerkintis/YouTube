@@ -18,6 +18,8 @@ class BrowseTopView: UIView {
     
     var subscribe : UIButton!
     
+    var currentChannelId : String?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -34,7 +36,7 @@ class BrowseTopView: UIView {
             make.height.equalTo(38)
         }
         
-       
+        
         
         backButton = UIButton(type: .Custom)
         
@@ -58,7 +60,7 @@ class BrowseTopView: UIView {
         titleLabel.textColor = .blackColor()
         
         detailsLabel = UILabel(frame: .zero)
-       
+        
         detailsLabel.font = UIFont.systemFontOfSize(13, weight: UIFontWeightMedium)
         detailsLabel.textColor = UIColor.grayColor()
         detailsLabel.textAlignment = .Right
@@ -108,6 +110,20 @@ class BrowseTopView: UIView {
             make.height.equalTo(25)
             make.center.equalTo(vv.center)
         }
+        
+        subscribe.addTarget(self, action: "subscribeOrUnsubscribe:", forControlEvents: .TouchDown)
+        
+    }
+    
+    func subscribeOrUnsubscribe(sender: UIButton){
+        if let currentId = currentChannelId{
+            SubscribeModel.sharedInstance.subscibeToChannel(currentId, accessToken: currentUser.token, completion: { (success) -> Void in
+                sender.setTitle("✓ Subscribed", forState: .Normal)
+                sender.backgroundColor = UIColor.clearColor()
+                sender.setTitleColor(.grayColor(), forState: .Normal)
+                sender.tag = 2
+            })
+        }
     }
     
     func setDetails(title: String, thumbnail : String, description : String, subscribed : Subscribed){
@@ -119,21 +135,24 @@ class BrowseTopView: UIView {
         subscribe.hidden = false
         if subscribed == .NotSubscribed{
             subscribe.setTitle("Subscribe", forState: .Normal)
+            subscribe.tag = 1
             subscribe.backgroundColor = UIColor.redColor()
             subscribe.setTitleColor(.whiteColor(), forState: .Normal)
         }else if subscribed == .Subscribed{
             subscribe.setTitle("✓ Subscribed", forState: .Normal)
             subscribe.backgroundColor = UIColor.clearColor()
+            subscribe.tag = 2
             subscribe.setTitleColor(.grayColor(), forState: .Normal)
         }else if subscribed == .Unknown{
             subscribe.hidden = true
+            subscribe.tag = 0
         }
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
 }
 
 enum Subscribed{

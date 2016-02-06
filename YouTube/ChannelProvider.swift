@@ -28,7 +28,7 @@ class ChannelProvider: NSObject {
             case .Success:
                 if let value = response.result.value {
                     let json = JSON(value)
-                    print("JSON: \(json)")
+                    //print("JSON: \(json)")
                     if let array = json["items"].array{
                         self.parseItems(array, completion: { (items) -> Void in
                             let nextpagetoken = json["nextPageToken"].string
@@ -82,7 +82,7 @@ class ChannelProvider: NSObject {
     
 }
 func haveISubscribedToChannel(id: String, token : String, completion : (Bool) -> Void){
-    let url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&access_token=\(token)&forChannelId=id"
+    let url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&access_token=\(token)&forChannelId=\(id)"
     let setCH = NSCharacterSet.URLQueryAllowedCharacterSet()
     Alamofire.request(.GET, url.stringByAddingPercentEncodingWithAllowedCharacters(setCH)!).validate().responseJSON { response in
         switch response.result {
@@ -92,7 +92,7 @@ func haveISubscribedToChannel(id: String, token : String, completion : (Bool) ->
                 print(json)
                 if let array = json["items"].array{
                     print(array.count == 0 ? "empty" : "full")
-                    completion(array.count == 0 ? true : false)
+                    completion(array.count == 0 ? false : true)
                 }
             }
         case .Failure(let error):

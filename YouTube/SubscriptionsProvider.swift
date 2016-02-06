@@ -21,7 +21,7 @@ class SubscriptionsProvider: NSObject {
             case .Success:
                 if let value = response.result.value {
                     let json = JSON(value)
-                   // print(json)
+                    print(json)
                     if let array = json["items"].array{
                         for object in array{
                             self.parseSubscription(object, completion: { (subscription) -> Void in
