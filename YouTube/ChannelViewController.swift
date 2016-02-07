@@ -187,7 +187,10 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         NSNotificationCenter.defaultCenter().postNotificationName(videoNotification, object: self.items![indexPath.row].video!)
     }
+    
 }
+
+
 public func delay(delay:Double, closure:()->()) {
     dispatch_after(
         dispatch_time(

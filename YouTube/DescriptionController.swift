@@ -11,7 +11,7 @@ import UIKit
 class DescriptionController: UIViewController {
     
     var titleView : TitleView!
-    
+   
     override func viewDidLoad() {
         super.viewDidLoad()
         titleView = TitleView(frame: .zero)
@@ -22,11 +22,13 @@ class DescriptionController: UIViewController {
             make.left.equalTo(38)
             make.height.equalTo(100)
         }
+        
+        
     }
     
     func loadVideoDetails(video : Video){
         if let videoDetails = video.videoDetails{
-            print(videoDetails.videoDescription)
+            //print(videoDetails.videoDescription)
             titleView.titleLabel.text = videoDetails.title
             if let views = Int(videoDetails.viewCount!)?.stringFormatedWithSepator, published = video.videoDetails?.publishedAtFormated{
                 titleView.viewsCountLabel.text = views + " views" + " • " + "Published on \(published)"
@@ -40,6 +42,12 @@ class DescriptionController: UIViewController {
                 if let subsribersCount = Int(subsCount){
                     titleView.channelTitleLabel.text = channelTitle + " • " + subsribersCount.stringFormatedWithSepator + " subscribers"
                 }
+            }
+            if let likeCount = video.videoDetails?.shortLikesCount, dislikeCount = video.videoDetails?.shortDislikesCount, videoId = video.videoDetails?.id{
+                titleView.ratingView.likeButton.setTitle(likeCount, forState: .Normal)
+                titleView.ratingView.dislikeButton.setTitle(dislikeCount, forState: .Normal)
+                titleView.ratingView.videoId = videoId
+                titleView.ratingView.updateButtons()
             }
         }
     }

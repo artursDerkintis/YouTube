@@ -50,6 +50,6 @@ class SubscribeModel: NSObject {
                 print(error)
             }
         }
-
     }
+    
 }

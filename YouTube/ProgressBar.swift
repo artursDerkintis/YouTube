@@ -40,8 +40,20 @@ class ProgressBar: UIControl {
         
         curentTime.text = "--:--"
         duration.text = "--:--"
+        let originalFont = UIFont.systemFontOfSize(12)
+        let originalFontDescriptor = originalFont.fontDescriptor()
         
-        curentTime.font = UIFont.systemFontOfSize(12, weight: UIFontWeightMedium)
+        let fontDescriptorFeatureSettings = [
+            [
+                UIFontFeatureTypeIdentifierKey: kNumberSpacingType,
+                UIFontFeatureSelectorIdentifierKey: kMonospacedNumbersSelector
+            ]
+        ]
+        
+        let fontDescriptorAttributes = [UIFontDescriptorFeatureSettingsAttribute: fontDescriptorFeatureSettings]
+        let fontDescriptor = originalFontDescriptor.fontDescriptorByAddingAttributes(fontDescriptorAttributes)
+        let font = UIFont(descriptor: fontDescriptor, size: 0)
+        curentTime.font = font
         curentTime.textColor = UIColor.whiteColor()
         curentTime.textAlignment = .Center
         curentTime.layer.shadowColor = UIColor.blackColor().CGColor
@@ -49,7 +61,7 @@ class ProgressBar: UIControl {
         curentTime.layer.shadowRadius = 0
         curentTime.layer.shouldRasterize = true
         curentTime.layer.rasterizationScale = UIScreen.mainScreen().scale
-        duration.font = UIFont.systemFontOfSize(12, weight: UIFontWeightMedium)
+        duration.font = font
         duration.textColor = UIColor.whiteColor()
         duration.textAlignment = .Center
         duration.layer.shadowColor = UIColor.blackColor().CGColor

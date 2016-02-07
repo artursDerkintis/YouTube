@@ -23,6 +23,8 @@ class TitleView: UIView {
     var likeButton : UIButton!
     var dislikeButton : UIButton!
     var commentsButton : UIButton!
+   
+    var ratingView : RatingView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -84,6 +86,17 @@ class TitleView: UIView {
         channelTitleLabel.font = UIFont.systemFontOfSize(12, weight: UIFontWeightRegular)
         channelTitleLabel.textColor = .blackColor()
         
+        
+        
+        ratingView = RatingView(frame: .zero)
+        addSubview(ratingView)
+        ratingView.snp_makeConstraints { (make) -> Void in
+            make.width.equalTo(150)
+            make.height.equalTo(50)
+            make.trailing.equalTo(0)
+            make.bottom.equalTo(0)
+        }
+
         
         
     }

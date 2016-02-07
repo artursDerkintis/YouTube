@@ -31,11 +31,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "YouTube/ProgressBar.swift"
-            timestampString = "473799720.434562"
+            timestampString = "476551093.120455"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "78"
-            endingLineNumber = "78"
+            startingLineNumber = "90"
+            endingLineNumber = "90"
             landmarkName = "secondsToHoursMinutesSeconds(_:)"
             landmarkType = "7">
          </BreakpointContent>

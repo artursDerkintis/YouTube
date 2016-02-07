@@ -49,6 +49,7 @@
 		B85F7A671C415F5300345109 /* SuggestedVideosProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F7A661C415F5300345109 /* SuggestedVideosProvider.swift */; };
 		B85F7A691C417FAA00345109 /* BottomProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85F7A681C417FAA00345109 /* BottomProgress.swift */; };
 		B85FD3781C6661F000FA7F4C /* RatingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FD3771C6661F000FA7F4C /* RatingView.swift */; };
+		B85FD37A1C666D6400FA7F4C /* RatingProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85FD3791C666D6400FA7F4C /* RatingProvider.swift */; };
 		B86980671C611AC900DE2EFC /* YouTubeQueriesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B86980661C611AC900DE2EFC /* YouTubeQueriesTests.swift */; };
 		B8722B251C35CFB900E5BBE4 /* ParallaxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8722B241C35CFB900E5BBE4 /* ParallaxView.swift */; };
 		B87570341C355A0B00256D82 /* ChannelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B87570331C355A0B00256D82 /* ChannelCell.swift */; };
@@ -145,6 +146,7 @@
 		B85F7A661C415F5300345109 /* SuggestedVideosProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SuggestedVideosProvider.swift; sourceTree = "<group>"; };
 		B85F7A681C417FAA00345109 /* BottomProgress.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BottomProgress.swift; sourceTree = "<group>"; };
 		B85FD3771C6661F000FA7F4C /* RatingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingView.swift; sourceTree = "<group>"; };
+		B85FD3791C666D6400FA7F4C /* RatingProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingProvider.swift; sourceTree = "<group>"; };
 		B86980661C611AC900DE2EFC /* YouTubeQueriesTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YouTubeQueriesTests.swift; sourceTree = "<group>"; };
 		B8722B241C35CFB900E5BBE4 /* ParallaxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParallaxView.swift; sourceTree = "<group>"; };
 		B87570331C355A0B00256D82 /* ChannelCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChannelCell.swift; sourceTree = "<group>"; };
@@ -269,6 +271,7 @@
 				B85F7A661C415F5300345109 /* SuggestedVideosProvider.swift */,
 				B83715E41C4267A500235D42 /* SmallVideoCell.swift */,
 				B85FD3771C6661F000FA7F4C /* RatingView.swift */,
+				B85FD3791C666D6400FA7F4C /* RatingProvider.swift */,
 			);
 			name = Description;
 			sourceTree = "<group>";
@@ -623,6 +626,7 @@
 				B82260A91C512F68009D980E /* ImageDownloader.swift in Sources */,
 				B85F7A671C415F5300345109 /* SuggestedVideosProvider.swift in Sources */,
 				B8302A6C1C5FAE91004EDEAE /* Favorites.swift in Sources */,
+				B85FD37A1C666D6400FA7F4C /* RatingProvider.swift in Sources */,
 				B829D2291C38352000C72547 /* SpringyFlowLayout.swift in Sources */,
 				B84338FE1C5785BF004AC5E9 /* SubscriptionsCell.swift in Sources */,
 				B8891CEE1C346310003E906E /* SearchResultsProvider.swift in Sources */,
