@@ -72,68 +72,70 @@ class RatingView: UIView {
     
     func like(sender: UIButton){
         if let videoId = videoId{
-            if !sender.selected{
-                RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.Like, accessToken: currentUser.token) { (done) -> Void in
-                    onMainThread({ () -> () in
-                        if var count = Int(sender.titleLabel!.text!){
-                            count += 1
-                            sender.setTitle(String(count), forState: .Normal)
-                        }
-                        sender.selected = true
-                        self.dislikeButton.selected = false
-                    })
+            if let currentUser = UserHandler.sharedInstance.user{
+                if !sender.selected{
+                    RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.Like, accessToken: currentUser.token) { (done) -> Void in
+                        onMainThread({ () -> () in
+                            if var count = Int(sender.titleLabel!.text!){
+                                count += 1
+                                sender.setTitle(String(count), forState: .Normal)
+                            }
+                            sender.selected = true
+                            self.dislikeButton.selected = false
+                        })
+                    }
+                }else{
+                    RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.None, accessToken: currentUser.token) { (done) -> Void in
+                        onMainThread({ () -> () in
+                            if var count = Int(sender.titleLabel!.text!){
+                                count -= 1
+                                sender.setTitle(String(count), forState: .Normal)
+                            }
+                            sender.selected = false
+                            self.dislikeButton.selected = false
+                            
+                        })
+                    }
                 }
-            }else{
-                RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.None, accessToken: currentUser.token) { (done) -> Void in
-                    onMainThread({ () -> () in
-                        if var count = Int(sender.titleLabel!.text!){
-                            count -= 1
-                            sender.setTitle(String(count), forState: .Normal)
-                        }
-                        sender.selected = false
-                        self.dislikeButton.selected = false
-
-                    })
-                }
-            }
-        }
+            }}
         
     }
     
     func dislike(sender : UIButton){
         if let videoId = videoId{
-            if !sender.selected{
-                RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.Dislike, accessToken: currentUser.token) { (done) -> Void in
-                    onMainThread({ () -> () in
-                        if var count = Int(sender.titleLabel!.text!){
-                            count += 1
-                            sender.setTitle(String(count), forState: .Normal)
-                           
-                        }
-                        sender.selected = true
-                        self.likeButton.selected = false
-                    })
-                }
-            }else{
-                RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.None, accessToken: currentUser.token) { (done) -> Void in
-                    onMainThread({ () -> () in
-                        if var count = Int(sender.titleLabel!.text!){
-                            count -= 1
-                            sender.setTitle(String(count), forState: .Normal)
-                            
-                        }
-                        sender.selected = false
-                        self.likeButton.selected = false
-                    })
-                    
+            if let currentUser = UserHandler.sharedInstance.user{
+                if !sender.selected{
+                    RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.Dislike, accessToken: currentUser.token) { (done) -> Void in
+                        onMainThread({ () -> () in
+                            if var count = Int(sender.titleLabel!.text!){
+                                count += 1
+                                sender.setTitle(String(count), forState: .Normal)
+                                
+                            }
+                            sender.selected = true
+                            self.likeButton.selected = false
+                        })
+                    }
+                }else{
+                    RatingProvider.sharedInstance.rateVideo(videoId, rating: Rating.None, accessToken: currentUser.token) { (done) -> Void in
+                        onMainThread({ () -> () in
+                            if var count = Int(sender.titleLabel!.text!){
+                                count -= 1
+                                sender.setTitle(String(count), forState: .Normal)
+                                
+                            }
+                            sender.selected = false
+                            self.likeButton.selected = false
+                        })
+                        
+                    }
                 }
             }
         }
-        
     }
     
     func updateButtons(){
-        if let videoId = videoId{
+        if let videoId = videoId, currentUser = UserHandler.sharedInstance.user{
             RatingProvider.sharedInstance.getCurrentRating(videoId, accessToken: currentUser.token, completion: { (rating: Rating) -> Void in
                 onMainThread({ () -> () in
                     switch rating{

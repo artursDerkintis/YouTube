@@ -58,7 +58,13 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
         activityInd.hidesWhenStopped = true
         loading = true
         NSNotificationCenter.defaultCenter().addObserverForName(subUpdate, object: nil, queue: nil) { (not) -> Void in
-            self.getChannelsInitially()
+            delay(6, closure: { () -> () in
+                self.getChannelsInitially()
+            })
+        }
+        getChannelsInitially()
+        delay(0.4) { () -> () in
+            self.browserDelegate?.setOwnInfo()
         }
     }
     
@@ -78,7 +84,7 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
             }
         }
     }
-
+    
     
     func setSmallLayout(){
         self.collectionView.performBatchUpdates({ () -> Void in
@@ -91,15 +97,10 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
     }
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
-        if keyPath == "loaded"{
-            getChannelsInitially()
-            browserDelegate?.setOwnInfo()
-        }
-    }
+    
     func getChannelsInitially(){
         
-        if let token = currentUser.token{
+        if let token = UserHandler.sharedInstance.user?.token{
             subs.getMySubscribedChannels(token, completion: { (subscriptions) -> Void in
                 self.subscriptions = subscriptions
                 self.loading = false
@@ -115,6 +116,7 @@ class SubscriptionsController: UIViewController, UICollectionViewDataSource, UIC
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
         if let sub = subscriptions?[indexPath.row]{
             browserDelegate?.loadSubscription(sub.channelId!)
+            collectionView.cellForItemAtIndexPath(indexPath)?.performFadeAnimation()
             delay(0.3, closure: { () -> () in
                 collectionView.scrollToItemAtIndexPath(indexPath, atScrollPosition: .Top, animated: true)
             })

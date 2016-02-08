@@ -11,18 +11,42 @@ import SwiftyUserDefaults
 import SwiftyJSON
 
 let currentUserKey = "currentUser"
-var currentUser : User!
 
 class UserHandler: NSObject {
+    private var timer = NSTimer()
     
-    override private init(){}
+    override private init(){
+        super.init()
+        NSNotificationCenter.defaultCenter().addObserverForName(UIApplicationWillEnterForegroundNotification, object: nil, queue: nil, usingBlock: { (not) -> Void in
+            
+            //Gets how much time left for accessToken and makes timer
+            self.expired({ (expired, expiresIn) -> Void in
+                if !expired, let expiresIn = expiresIn{
+                    self.timer.invalidate()
+                    self.timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(expiresIn), target: self, selector: "updateToken", userInfo: nil, repeats: false)
+                }else{
+                    self.updateToken()
+                }
+            })
+
+        })
+        
+        //Gets how much time left for accessToken and makes timer
+        self.expired({ (expired, expiresIn) -> Void in
+            if !expired, let expiresIn = expiresIn{
+                self.timer.invalidate()
+                self.timer = NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(expiresIn), target: self, selector: "updateToken", userInfo: nil, repeats: false)
+            }else{
+                self.updateToken()
+            }
+        })
+
+    }
     static let sharedInstance = UserHandler()
     var user : User? {
         get{
             if let archived = Defaults.objectForKey(currentUserKey) as? NSData{
                 if let newUser = NSKeyedUnarchiver.unarchiveObjectWithData(archived) as? User{
-                    currentUser = newUser
-                    loaded = true
                     return newUser
                 }else{
                     return nil
@@ -33,15 +57,13 @@ class UserHandler: NSObject {
         }
         set{
             if let object = newValue{
-                currentUser = object
                 let archivedObj = NSKeyedArchiver.archivedDataWithRootObject(object)
                 Defaults.setObject(archivedObj, forKey: currentUserKey)
-                loaded = true
+                
             }
         }
     }
-    dynamic var loaded = false
-    func expired(completion:(Bool) -> Void){
+    func expired(completion:(expired : Bool, expiresIn : Int?) -> Void){
         if let token = user?.token{
             let urlString = "https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=\(token)"
             if let url = NSURL(string: urlString){
@@ -51,28 +73,23 @@ class UserHandler: NSObject {
                         if json["error"].string == "invalid_token" {
                             
                             //Expired
-                            completion(true)
+                            completion(expired: true, expiresIn: nil)
                         }else{
-                            
-                            //Hasn't expired
-                            completion(false)
-                            
-                            //Set up timer for fetching new access token when old one expires
-                            if let expiresIn = json["expires_in"].string{
-                                NSTimer.scheduledTimerWithTimeInterval(NSTimeInterval(expiresIn)!, target: self, selector: "updateToken", userInfo: nil, repeats: false)
+                            if let expiresIn = json["expires_in"].int{
+                                //Hasn't expired
+                                completion(expired: false, expiresIn: expiresIn)
                             }
-                            
                         }
                         print(json)
                         return
                     }
-                    error == nil ? completion(true) : completion(false)
                     }.resume()
             }
         }else{
-            completion(true)
+            
         }
     }
+    
     func updateToken(){
         YouTubeClient.sharedInstance.login()
     }

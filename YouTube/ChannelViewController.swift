@@ -10,7 +10,7 @@ import UIKit
 import NVActivityIndicatorView
 
 class ChannelViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
-
+    
     
     private var items : [Item]? {
         didSet{
@@ -31,7 +31,7 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     private var activityInd: NVActivityIndicatorView!
     private var buttomLoader : NVActivityIndicatorView!
-
+    
     private var currentChannelId : String?
     
     override func viewDidLoad() {
@@ -67,8 +67,8 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
             make.bottom.equalTo(10)
             make.height.equalTo(64)
         }
-
-      
+        
+        
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -93,38 +93,39 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
     
     func loadVideosForChannel(id: String){
         self.currentChannelId = id
-        let accesToken = currentUser.token
-        provider.getVideosOfChannel(id, accessToken: accesToken, pageToken: pageToken) { (nextPageToken, items) -> Void in
-            self.loading = false
-            self.loadingmore = false
-            if self.pageToken == nil{
-                self.items = items.filter({ (item) -> Bool in
-                    if item.type == .Video{
-                        return true
-                    }else{
-                        return false
-                    }
-                })
-            }else{
-                if self.items != nil{
-                    self.items! += items.filter({ (item) -> Bool in
+        if let currentUser = UserHandler.sharedInstance.user{
+            let accesToken = currentUser.token
+            provider.getVideosOfChannel(id, accessToken: accesToken, pageToken: pageToken) { (nextPageToken, items) -> Void in
+                self.loading = false
+                self.loadingmore = false
+                if self.pageToken == nil{
+                    self.items = items.filter({ (item) -> Bool in
                         if item.type == .Video{
                             return true
                         }else{
                             return false
                         }
                     })
-                    
+                }else{
+                    if self.items != nil{
+                        self.items! += items.filter({ (item) -> Bool in
+                            if item.type == .Video{
+                                return true
+                            }else{
+                                return false
+                            }
+                        })
+                        
+                    }
                 }
+                self.pageToken = nextPageToken
             }
-            self.pageToken = nextPageToken
         }
-        
     }
     
     
     
-   
+    
     func scrollViewDidEndDecelerating(scrollView: UIScrollView) {
         
         if (scrollView.contentOffset.y >= (scrollView.contentSize.height - scrollView.frame.size.height)) {
@@ -139,17 +140,17 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         if (scrollView.contentOffset.y >= 0 && scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.frame.size.height)){
             //not top and not bottom
-           
+            
         }
     }
-
-
+    
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
-
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return items?.count ?? 0
     }
@@ -158,7 +159,7 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
         
         let videoCell = collectionView.dequeueReusableCellWithReuseIdentifier("VidCell", forIndexPath: indexPath) as! VideoCell
         if let item = items?[indexPath.row] where item.type == .Video{
-         
+            
             ImageDownloader.sharedInstance.getImageAtURL(item.video?.videoDetails?.thumbnail, completion: { (image) -> Void in
                 videoCell.thumbnailImageView.image = image
             })
@@ -179,12 +180,13 @@ class ChannelViewController: UIViewController, UICollectionViewDelegate, UIColle
             if let views = item.video?.videoDetails?.shortViewCount{
                 videoCell.viewsCountLabel.text = views
             }
-           
+            
         }
         return videoCell
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        collectionView.cellForItemAtIndexPath(indexPath)?.performFadeAnimation()
         NSNotificationCenter.defaultCenter().postNotificationName(videoNotification, object: self.items![indexPath.row].video!)
     }
     

@@ -55,7 +55,7 @@ class ChannelProvider: NSObject {
                 if amount.count == objects.count{
                     completion(items: items)
                 }
-            
+                
             })
         }
     }
@@ -99,5 +99,32 @@ func haveISubscribedToChannel(id: String, token : String, completion : (Bool) ->
             print(error)
         }
     }
-
+    
+}
+func getSubscritionId(channelId : String, token : String?, completion:(subscriptionId : String) -> Void){
+    let url = "https://www.googleapis.com/youtube/v3/subscriptions?part=snippet&mine=true&access_token=\(token ?? "")&forChannelId=\(channelId)"
+    
+    let setCH = NSCharacterSet.URLQueryAllowedCharacterSet()
+    Alamofire.request(.GET, url.stringByAddingPercentEncodingWithAllowedCharacters(setCH)!).validate().responseJSON { response in
+        switch response.result {
+        case .Success:
+            if let value = response.result.value {
+                let json = JSON(value)
+                print(json)
+                if let array = json["items"].array{
+                    if let id = array[0]["id"].string{
+                        completion(subscriptionId: id)
+                    }
+                }
+            }
+            break
+            
+        case .Failure(let error):
+            print(error)
+            break
+            
+        }
+    }
+    
+    
 }

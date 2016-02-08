@@ -116,13 +116,33 @@ class BrowseTopView: UIView {
     }
     
     func subscribeOrUnsubscribe(sender: UIButton){
-        if let currentId = currentChannelId{
+        if let currentId = currentChannelId, let currentUser = UserHandler.sharedInstance.user where sender.tag == 1{
             SubscribeModel.sharedInstance.subscibeToChannel(currentId, accessToken: currentUser.token, completion: { (success) -> Void in
                 sender.setTitle("✓ Subscribed", forState: .Normal)
                 sender.backgroundColor = UIColor.clearColor()
                 sender.setTitleColor(.grayColor(), forState: .Normal)
                 sender.tag = 2
             })
+        }else if let currentId = currentChannelId, let currentUser = UserHandler.sharedInstance.user where sender.tag == 2{
+            let actionSheetController: UIAlertController = UIAlertController(title: nil, message: nil, preferredStyle: .ActionSheet)
+            
+            let unsubscribeAction = UIAlertAction(title: "Unsubscribe", style: UIAlertActionStyle.Destructive) { action -> Void in
+                getSubscritionId(currentId, token: currentUser.token, completion: { (subscriptionId) -> Void in
+                    SubscribeModel.sharedInstance.unsubscribeToChannel(subscriptionId, accessToken: currentUser.token, completion: { (success) -> Void in
+                        sender.setTitle("Subscribe", forState: .Normal)
+                        sender.tag = 1
+                        sender.backgroundColor = UIColor.redColor()
+                        sender.setTitleColor(.whiteColor(), forState: .Normal)
+                    })
+                })
+                
+            }
+            actionSheetController.addAction(unsubscribeAction)
+            
+            actionSheetController.popoverPresentationController?.sourceView = sender as UIView
+            actionSheetController.popoverPresentationController?.sourceRect = CGRect(x: sender.frame.width * 0.5, y: 20, width: 1, height: 1)
+            self.firstViewController()?.presentViewController(actionSheetController, animated: true, completion: nil)
+            
         }
     }
     
@@ -159,4 +179,25 @@ enum Subscribed{
     case Subscribed
     case NotSubscribed
     case Unknown
+}
+
+
+extension UIView{
+    
+    func firstViewController() -> UIViewController?{
+        return tranverseResponderChainForUIVc()  as? UIViewController
+    }
+    func tranverseResponderChainForUIVc() -> AnyObject?{
+        if let res = self.nextResponder(){
+            if res.isKindOfClass(UIViewController){
+                return res
+            }else if res.isKindOfClass(UIView){
+                return (res as! UIView).tranverseResponderChainForUIVc()
+            }
+        }
+        return nil
+        
+    }
+    
+    
 }

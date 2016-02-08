@@ -80,14 +80,19 @@ class SuggestedVideosController: UIViewController, UICollectionViewDataSource, U
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return videos?.count ?? 0
     }
+    
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        collectionView.cellForItemAtIndexPath(indexPath)?.performFadeAnimation()
         NSNotificationCenter.defaultCenter().postNotificationName(videoNotification, object: self.videos![indexPath.row])
     }
+    
+    
     func getSuggestions(id : String){
-        
+        self.videos?.removeAll()
         provider.getSuggestionsForID(id) { (videos) -> Void in
-                     self.videos = videos
+            self.videos = videos
         }
     }
+    
 }
 

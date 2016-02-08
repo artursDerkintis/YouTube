@@ -13,7 +13,8 @@ class YouTubeClient: NSObject, GIDSignInDelegate, GIDSignInUIDelegate  {
     private override init() {}
     
     func login(){
-        UserHandler.sharedInstance.expired { (expired) -> Void in
+        UserHandler.sharedInstance.expired { (expired, expiresIn) -> Void in
+            
             if expired{
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
                     //Have expired - request new one
@@ -27,11 +28,12 @@ class YouTubeClient: NSObject, GIDSignInDelegate, GIDSignInUIDelegate  {
                 //Havent expired
                 
                 dispatch_async(dispatch_get_main_queue()) { () -> Void in
-                    UserHandler.sharedInstance.loaded = true
+                    
                 }
             }
         }
     }
+    
     func signIn(signIn: GIDSignIn!, didSignInForUser user: GIDGoogleUser!, withError error: NSError!) {
         if (error == nil) {
             // Perform any operations on signed in user here.

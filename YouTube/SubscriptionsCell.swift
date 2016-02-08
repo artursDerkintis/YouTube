@@ -94,7 +94,20 @@ class SubscriptionsCell: UICollectionViewCell {
       
     }
     
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension UICollectionViewCell{
+    func performFadeAnimation(){
+        UIView.animateWithDuration(0.25, animations: { () -> Void in
+            self.alpha = 0.7
+            }) { (fin) -> Void in
+                UIView.animateWithDuration(0.25, animations: { () -> Void in
+                    self.alpha = 1.0
+                })
+        }
     }
 }

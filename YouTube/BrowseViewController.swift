@@ -58,6 +58,7 @@ class BrowseViewController: UIViewController, BrowserDelegate {
         
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "openChannelByNotif:", name: channelNotification, object: nil)
+        setOwnInfo()
     }
     
     func openChannelByNotif(not : NSNotification){
@@ -107,8 +108,10 @@ class BrowseViewController: UIViewController, BrowserDelegate {
     }
     
     func setOwnInfo(){
-        navigationView.setDetails(currentUser.name!, thumbnail: currentUser.imageURL!, description: "", subscribed: Subscribed.Unknown)
-        navigationView.backButton.hidden = true
+        if let currentUser = UserHandler.sharedInstance.user{
+            navigationView.setDetails(currentUser.name!, thumbnail: currentUser.imageURL!, description: "", subscribed: Subscribed.Unknown)
+            navigationView.backButton.hidden = true
+        }
         
     }
     func setChannelInfo(){
@@ -120,18 +123,18 @@ class BrowseViewController: UIViewController, BrowserDelegate {
     }
     func loadSubscription(channelId : String){
         let channel = Channel()
-        channel.getChannelDetails(channelId) { (channelDetails) -> Void in
-            channel.channelDetails = channelDetails
-            haveISubscribedToChannel(channelId, token: currentUser.token!, completion: { (fin) -> Void in
-                channel.subscribed = fin
-                self.currentChannel = channel
-                self.forwardSteps.append(self.currentChannel)
-                self.setChannelInfo()
-                self.openChannel(self.currentChannel)
-            })
-            
+        if let currentUser = UserHandler.sharedInstance.user{
+            channel.getChannelDetails(channelId) { (channelDetails) -> Void in
+                channel.channelDetails = channelDetails
+                haveISubscribedToChannel(channelId, token: currentUser.token!, completion: { (fin) -> Void in
+                    channel.subscribed = fin
+                    self.currentChannel = channel
+                    self.forwardSteps.append(self.currentChannel)
+                    self.setChannelInfo()
+                    self.openChannel(self.currentChannel)
+                })
+            }
         }
-        
     }
     
     func openChannel(channel: Channel) {

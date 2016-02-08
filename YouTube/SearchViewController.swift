@@ -188,6 +188,7 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
         searchField.endEditing(true)
         self.pageToken = nil
         currentSearch = string
+        self.items?.removeAll()
         self.items = nil
         getSearchResults(string)
         showHideSuggs(true)
@@ -310,7 +311,7 @@ class SearchViewController: UIViewController, UICollectionViewDataSource, UIColl
     }
     
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
-        
+        collectionView.cellForItemAtIndexPath(indexPath)?.performFadeAnimation()
         if let item = self.items?[indexPath.row] where item.type == .Video{
             NSNotificationCenter.defaultCenter().postNotificationName(videoNotification, object: item.video!)
         }else if let item = self.items?[indexPath.row] where item.type == .Channel{
