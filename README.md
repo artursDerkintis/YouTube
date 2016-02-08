@@ -14,7 +14,7 @@ It looks like this.
 #TODO
 Its not even close to ready.
 
-It has no unit tests yet, because for now the app's structure is in my head.
+It has some unit tests but not enough.
 
 Still to implement:
       *like/dislike
